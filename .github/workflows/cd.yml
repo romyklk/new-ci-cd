@@ -19,7 +19,7 @@ jobs:
       - name: Checkout code  # Nom de l'action, affiché dans l’interface GitHub Actions.
         uses: actions/checkout@v2  # Action GitHub pour récupérer le code source du dépôt. Elle est obligatoire pour accéder au code du dépôt. Sans cette ligne, GitHub Actions ne peut pas accéder au code du dépôt.
       - name: Deploiement sur le serveur de production  # Nom de l'action, affiché dans l’interface GitHub Actions.
-        uses: appleboy/scp-action@master  # Utilise l'action `appleboy/scp-action` pour copier des fichiers vers un serveur distant via SCP (Secure Copy Protocol).
+        uses: appleboy/ssh-action@master # Utilise l'action `appleboy/scp-action` pour copier des fichiers vers un serveur distant via SCP (Secure Copy Protocol).
         with:  # Spécifie les paramètres pour l'action de déploiement
           host: ${{ secrets.SSH_HOST }}  # Adresse du serveur distant, stockée dans les secrets GitHub pour des raisons de sécurité.
           username: ${{ secrets.SSH_USER }}  # Nom d'utilisateur pour se connecter au serveur distant, également stocké dans les secrets GitHub.
@@ -27,10 +27,15 @@ jobs:
           port: ${{ secrets.SSH_PORT }}  # Port SSH du serveur distant, stocké dans les secrets GitHub.
           script: |
             cd ~/domains/romyklk.me/public_html/symdeploy
+
             git pull origin production  # Met à jour le code sur le serveur distant en tirant les dernières modifications de la branche 'production'.
+
             composer install --no-interaction --prefer-dist --optimize-autoloader  # Installe les dépendances PHP via Composer sur le serveur distant.
+
             php bin/console cache:clear --env=prod  # Vide le cache de l'application Symfony en mode production.
+
             php bin/console doctrine:migrations:migrate --no-interaction  # Exécute les migrations de la base de données pour mettre à jour le schéma en fonction des entités définies dans l'application Symfony.
+            
             php bin/console assets:install --symlink  # Installe les assets (fichiers CSS, JS, images, etc.) de l'application Symfony.
 
 
