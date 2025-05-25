@@ -45,5 +45,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Vérification des vulnérabilités
+      - name: Vérification des vulnérabilités dans les dépendances
         run: composer audit
+      
+      - name: Vérification des vulnérabilités dans un projet symfony
+        run: | # avec le pipe on peut mettre plusieurs commandes
+          curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash && sudo apt install symfony-cli mv /home/runner/.sansfony*/bin/symfony /usr/local/bin/symfony
+      
+      - name: Vérification des vulnérabilités dans un projet symfony
+        run: |
+          symfony check:security --no-interaction --format=txt --ansi --no-ansi --no-color
