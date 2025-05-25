@@ -37,6 +37,21 @@ jobs:
       - name: Installation des dépendances # Nom de l'action pour installer les dépendances
         run: composer install --no-interaction --prefer-dist --optimize-autoloader  # Commande pour installer les dépendances PHP via Composer. Les options `--no-interaction`, `--prefer-dist`, et `--optimize-autoloader` sont utilisées pour une installation optimisée et sans interaction utilisateur .
 
+      - name: Installation des outils d'analyse statique
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools
+
+      - name: Upload vendor dependencies # Sauvegarde des dépendances principales
+        uses: actions/upload-artifact@v4
+        with:
+          name: vendor-dependencies
+          path: vendor/
+
+      - name: Upload tools dependencies # Sauvegarde des outils d'analyse
+        uses: actions/upload-artifact@v4
+        with:
+          name: tools-dependencies
+          path: tools/vendor/
+
   checking-des-vulnerabilite:
     runs-on: ubuntu-latest
     needs: initialisation  # Indique que ce job dépend du job `initialisation`, il ne sera exécuté qu'après la réussite de ce dernier.
@@ -44,6 +59,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Ajout de php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, curl,ctype,iconv,intl, pdo,pdo_mysql,filter, json, bcmath, gd
+
+      - name: Download vendor dependencies # Récupération des dépendances principales
+        uses: actions/download-artifact@v4
+        with:
+          name: vendor-dependencies
+          path: vendor/
 
       - name: Vérification des vulnérabilités dans les dépendances
         run: composer audit # Cette action utilise Composer pour vérifier les vulnérabilités dans les dépendances du projet PHP. La commande `composer audit` analyse les dépendances installées et signale les éventuelles vulnérabilités connues.
@@ -64,10 +91,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Ajout de php
+        uses: shivammathur/setup-php@v2
         with:
-          path: tools  # Spécifie le chemin vers le répertoire contenant les outils nécessaires pour l'analyse statique.
-      - name: Installation des outils d'analyse statique
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools  # Installe les dépendances nécessaires pour l'analyse statique à partir du répertoire `tools`.
+          php-version: '8.3'
+          extensions: mbstring, xml, curl,ctype,iconv,intl, pdo,pdo_mysql,filter, json, bcmath, gd
+
+      - name: Download tools dependencies # Récupération des outils d'analyse
+        uses: actions/download-artifact@v4
+        with:
+          name: tools-dependencies
+          path: tools/vendor/
 
       - name: analyse avec PHP CS FIXER
         run: ./tools/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php -v --dry-run
