@@ -85,4 +85,4 @@ jobs:
 
       ## LINTER CONTAINERS
       - name: Linter Containers
-        run: ./bin/console lint:container --no-optional --no-unused --no-deprecated # Cette action utilise la commande `lint:container` de Symfony pour vérifier la configuration des conteneurs de services. Elle signale les erreurs de configuration, les services inutilisés, et les services obsolètes dans le conteneur de services Symfony.
+        run: ./bin/console lint:container # Cette action utilise la commande `lint:container` de Symfony pour vérifier la configuration des conteneurs de services. Elle signale les erreurs de configuration dans le conteneur de services Symfony.
