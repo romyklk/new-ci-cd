@@ -26,3 +26,13 @@ jobs:
         with: # Spécifie les paramètres pour l'action `Ajout de php`
           php-version: '8.3'  # Spécifie la version de PHP à installer, ici la version 8.1
           extensions: mbstring, xml, curl,ctype,iconv,intl, pdo,pdo_mysql,filter, json, bcmath, gd  # Liste des extensions PHP à installer. Ces extensions sont souvent nécessaires pour les applications PHP.
+
+      - name: Gestion du cache # Nom de l'action pour gérer le cache
+        uses: actions/cache@v2 # Utilise l'action `actions/cache` pour mettre en cache les dépendances et accélérer les builds futurs.
+        with: # Spécifie les paramètres pour l'action de gestion du cache
+          path: vendor  # Chemin vers le répertoire à mettre en cache
+          key: ${{ runner.os }}-build-${{ hashFiles('**/composer.lock') }}  # Clé unique pour le cache, basée sur le système d'exploitation (ici ubuntu-latest) et le hash du fichier composer.lock.Cette clé permet de créer un cache spécifique à la version des dépendances du projet.donc si le fichier composer.lock change, le cache sera invalidé et un nouveau cache sera créé sinon on utilisera le cache existant.
+          # La clé est utilisée pour identifier le cache et le restaurer lors des exécutions futures.
+
+      - name: Installation des dépendances # Nom de l'action pour installer les dépendances
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader  # Commande pour installer les dépendances PHP via Composer. Les options `--no-interaction`, `--prefer-dist`, et `--optimize-autoloader` sont utilisées pour une installation optimisée et sans interaction utilisateur.
