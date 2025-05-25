@@ -13,6 +13,8 @@ jobs:
   initialisation:  # Nom du job, qui peut être utilisé pour identifier le job dans l’interface GitHub Actions
     runs-on: ubuntu-latest  # Spécifie l’environnement d’exécution du job, ici une machine virtuelle Ubuntu
 
+    continue-on-error: false  # Indique que le job doit échouer si une étape échoue. Si cette option est définie sur true, le job continuera même si une étape échoue, ce qui n'est pas souhaitable dans un pipeline CI.
+
     steps:  # Liste des actions à exécuter dans le job build-ci
 
       - name: Checkout code  # Nom de l'action, affiché dans l’interface GitHub Actions.
@@ -94,8 +96,9 @@ jobs:
 
       ## LES TESTS UNITAIRES
       - name: Exécution des tests unitaires
-        run: ./tools/phpunit/vendor/bin/phpunit --colors=always --coverage-html reports/
-        # Cette action exécute les tests unitaires en utilisant PHPUnit. Elle utilise le fichier de configuration `phpunit.xml` pour configurer les tests et génère un rapport de couverture de code au format HTML dans le répertoire `reports/`.
+        run: ./tools/phpunit/vendor/bin/phpunit --colors=always
+        # Cette action exécute les tests unitaires en utilisant PHPUnit. Elle utilise le fichier de configuration `phpunit.xml.dist` à la racine pour configurer les tests.
 
       - name: Affichage des résultats des tests unitaires
-        run: ./tools/phpunit/vendor/bin/phpunit --configuration=tools/phpunit/phpunit.xml --coverage-html reports/ --colors=never --testdox # Cette action exécute à nouveau les tests unitaires avec l'option `--testdox` pour afficher un rapport de test plus lisible et compréhensible. Elle utilise le même fichier de configuration `phpunit.xml` que précédemment.
+        run: ./tools/phpunit/vendor/bin/phpunit --colors=never --testdox
+        # Cette action exécute les tests unitaires avec l'option `--testdox` pour afficher un rapport de test plus lisible et compréhensible.
