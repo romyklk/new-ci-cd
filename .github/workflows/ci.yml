@@ -37,8 +37,9 @@ jobs:
       - name: Installation des dépendances # Nom de l'action pour installer les dépendances
         run: | 
             composer install --no-interaction --prefer-dist --optimize-autoloader  
+            
             composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools/php-cs-fixer
-           # Commande pour installer les dépendances PHP via Composer. Les options `--no-interaction`, `--prefer-dist`, et `--optimize-autoloader` sont utilisées pour une installation optimisée et sans interaction utilisateur .
+           # CETTE PARTIE EST A FAIRE DANS LA SECONDE PARTIE : Commande pour installer les dépendances PHP via Composer. Les options `--no-interaction`, `--prefer-dist`, et `--optimize-autoloader` sont utilisées pour une installation optimisée et sans interaction utilisateur .
 
       - name: Vérification des vulnérabilités dans les dépendances
         run: composer audit # Cette action utilise Composer pour vérifier les vulnérabilités dans les dépendances du projet PHP. La commande `composer audit` analyse les dépendances installées et signale les éventuelles vulnérabilités connues.
