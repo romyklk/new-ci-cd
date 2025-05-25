@@ -3,5 +3,3 @@ parameters:
     paths:
         - src
         - tests
-    ignoreErrors:
-        - "#Property App\\\\Entity\\\\.*::\\$id is never written, only read\\.#"
