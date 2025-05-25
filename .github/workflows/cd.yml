@@ -1,41 +1,38 @@
-name: Pipeline CD  # Nom du workflow affiché dans l’interface GitHub Actions
+name: Pipeline CD
 
 on:
-  push:  # Déclenche le workflow lorsqu’un commit est poussé (push) sur une branche spécifique
+  push:
     branches:
-      - production  # Se déclenche uniquement quand la branche 'production' reçoit un push (ex : git push origin production)
-
-  pull_request:  # Déclenche le workflow lorsqu’une Pull Request est ouverte, synchronisée, ou mise à jour
+      - production
+  pull_request:
     branches:
-      - production  # Se déclenche uniquement pour les PR ciblant la branche 'main' (ex : PR de feature vers main)
+      - production
 
 jobs:
-  deployment:  # Nom du job, qui peut être utilisé pour identifier le job dans l’interface GitHub Actions
-    runs-on: ubuntu-latest  # Spécifie l’environnement d’exécution du job, ici une machine virtuelle Ubuntu
+  deployment:
+    runs-on: ubuntu-latest
+    continue-on-error: false
 
-    continue-on-error: false  # Indique que le job doit échouer si une étape échoue. Si cette option est définie sur true, le job continuera même si une étape échoue, ce qui n'est pas souhaitable dans un pipeline CI.
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    steps:  # Liste des actions à exécuter dans le job build-ci
-      - name: Checkout code  # Nom de l'action, affiché dans l’interface GitHub Actions.
-        uses: actions/checkout@v2  # Action GitHub pour récupérer le code source du dépôt. Elle est obligatoire pour accéder au code du dépôt. Sans cette ligne, GitHub Actions ne peut pas accéder au code du dépôt.
-      - name: Deploiement sur le serveur de production  # Nom de l'action, affiché dans l’interface GitHub Actions.
-        uses: appleboy/ssh-action@master # Utilise l'action `appleboy/scp-action` pour copier des fichiers vers un serveur distant via SCP (Secure Copy Protocol).
-        with:  # Spécifie les paramètres pour l'action de déploiement
-          host: ${{ secrets.SSH_HOST }}  # Adresse du serveur distant, stockée dans les secrets GitHub pour des raisons de sécurité.
-          username: ${{ secrets.SSH_USER }}  # Nom d'utilisateur pour se connecter au serveur distant, également stocké dans les secrets GitHub.
-          key: ${{ secrets.SSH_PRIVATE_KEY }}  # Clé privée SSH pour l'authentification, stockée dans les secrets GitHub.
-          port: ${{ secrets.SSH_PORT }}  # Port SSH du serveur distant, stocké dans les secrets GitHub.
+      - name: Déploiement sur le serveur de production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/domains/romyklk.me/public_html/symdeploy
 
-            git pull origin production  # Met à jour le code sur le serveur distant en tirant les dernières modifications de la branche 'production'.
+            git pull origin production
 
-            composer install --no-interaction --prefer-dist --optimize-autoloader  # Installe les dépendances PHP via Composer sur le serveur distant.
+            composer install --no-interaction --prefer-dist --optimize-autoloader
 
-            php bin/console cache:clear --env=prod  # Vide le cache de l'application Symfony en mode production.
+            php bin/console cache:clear --env=prod
 
-            php bin/console doctrine:migrations:migrate --no-interaction  # Exécute les migrations de la base de données pour mettre à jour le schéma en fonction des entités définies dans l'application Symfony.
-            
-            php bin/console assets:install --symlink  # Installe les assets (fichiers CSS, JS, images, etc.) de l'application Symfony.
+            php bin/console doctrine:migrations:migrate --no-interaction
 
-
+            php bin/console assets:install --symlink
