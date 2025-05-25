@@ -61,7 +61,7 @@ jobs:
        # CS FIXER
       - name: analyse avec PHP CS FIXER
         env: #Variable d'environnement pour PHP CS FIXER
-          # PHP_CS_FIXER_IGNORE_ENV: 1 permet d'ignorer les variables d'environnement pour la configuration de PHP CS FIXER.Icie j'en ai besoin pour ne pas teniir compte de la version de PHP utilisée dans l'environnement d'exécution du job.
+          # PHP_CS_FIXER_IGNORE_ENV: 1 permet d'ignorer les variables d'environnement pour la configuration de PHP CS-FIXER.Icie j'en ai besoin pour ne pas teniir compte de la version de PHP utilisée dans l'environnement d'exécution du job.
           PHP_CS_FIXER_IGNORE_ENV: 1
         run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php -v --dry-run
 
