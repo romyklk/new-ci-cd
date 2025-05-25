@@ -25,5 +25,5 @@ jobs:
           username: ${{ secrets.SSH_USER }}  # Nom d'utilisateur pour se connecter au serveur distant, également stocké dans les secrets GitHub.
           key: ${{ secrets.SSH_PRIVATE_KEY }}  # Clé privée SSH pour l'authentification, stockée dans les secrets GitHub.
           port: ${{ secrets.SSH_PORT }}  # Port SSH du serveur distant, stocké dans les secrets GitHub.
-          scripts: ls
+
 
