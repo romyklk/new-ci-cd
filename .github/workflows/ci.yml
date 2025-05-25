@@ -18,5 +18,5 @@ jobs:
       - name: Checkout code  # Nom de l’étape, affiché dans l’interface GitHub Actions.
         uses: actions/checkout@v2  # Action GitHub pour récupérer le code source du dépôt.Elle est obligatoire pour accéder au code du dépôt dans le job.Sans cette ligne github actions ne peut pas accéder au code du dépôt.
 
-      - name: liste mes fichiers  # Nom de l’étape, affiché dans l’interface GitHub Actions.
+      - name: liste mes fichiers  # Cette première action est un simple exemple pour lister les fichiers du répertoire courant.pour voir cela, aller dans l’onglet "Actions"
         run: ls -la  # Commande shell exécutée pour lister les fichiers du répertoire courant. Utile pour vérifier que le code a bien été récupéré.
