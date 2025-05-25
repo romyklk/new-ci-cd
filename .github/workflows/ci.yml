@@ -25,4 +25,4 @@ jobs:
         uses: shivammathur/setup-php@v2 # use permet permet d'utiliser une action GitHub pour configurer l'environnement PHP. On utilise ici l'action `shivammathur/setup-php` pour installer PHP dans l'environnement d'exécution du job.
         with: # Spécifie les paramètres pour l'action `Ajout de php`
           php-version: '8.3'  # Spécifie la version de PHP à installer, ici la version 8.1
-          extensions: mbstring, xml, curl,ctype,inconv,intl, pdo,pdo_mysql,filter, json, bcmath, gd  # Liste des extensions PHP à installer. Ces extensions sont souvent nécessaires pour les applications PHP.
+          extensions: mbstring, xml, curl,ctype,iconv,intl, pdo,pdo_mysql,filter, json, bcmath, gd  # Liste des extensions PHP à installer. Ces extensions sont souvent nécessaires pour les applications PHP.
