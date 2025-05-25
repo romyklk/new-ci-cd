@@ -46,13 +46,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Vérification des vulnérabilités dans les dépendances
-        run: composer audit
+        run: composer audit # Cette action utilise Composer pour vérifier les vulnérabilités dans les dépendances du projet PHP. La commande `composer audit` analyse les dépendances installées et signale les éventuelles vulnérabilités connues.
       
       - name: Vérification des vulnérabilités dans un projet Symfony
         run: |
-           curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash \
-           && sudo apt install -y symfony-cli \
-           && sudo mv /home/runner/.symfony*/bin/symfony /usr/local/bin/symfony
+              url -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
+              sudo apt install -y symfony-cli
 
       - name: Vérification des vulnérabilités dans un projet Symfony
         run: |
