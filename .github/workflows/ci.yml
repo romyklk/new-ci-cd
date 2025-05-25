@@ -1,0 +1,58 @@
+name: Pipeline CI  # Nom du workflow affiché dans l’interface GitHub Actions
+
+on:
+  push:  # Déclenche le workflow lorsqu’un commit est poussé (push) sur une branche spécifique
+    branches:
+      - main  # Se déclenche uniquement quand la branche 'main' reçoit un push (ex : git push origin main)
+
+  pull_request:  # Déclenche le workflow lorsqu’une Pull Request est ouverte, synchronisée, ou mise à jour
+    branches:
+      - main  # Se déclenche uniquement pour les PR ciblant la branche 'main' (ex : PR de feature vers main)
+
+jobs:
+  initialisation:  # Nom du job, qui peut être utilisé pour identifier le job dans l’interface GitHub Actions
+    runs-on: ubuntu-latest  # Spécifie l’environnement d’exécution du job, ici une machine virtuelle Ubuntu
+
+    steps:  # Liste des actions à exécuter dans le job build-ci
+
+      - name: Checkout code  # Nom de l'action, affiché dans l’interface GitHub Actions.
+        uses: actions/checkout@v2  # Action GitHub pour récupérer le code source du dépôt.Elle est obligatoire pour accéder au code du dépôt dans le job.Sans cette ligne github actions ne peut pas accéder au code du dépôt.
+
+      - name: liste mes fichiers  # Cette première action est un simple exemple pour lister les fichiers du répertoire courant.pour voir cela, aller dans l’onglet "Actions"
+        run: ls -la  # Commande shell exécutée pour lister les fichiers du répertoire courant. Utile pour vérifier que le code a bien été récupéré.
+      
+      - name: Ajout de php # Nom de l'action pour installer PHP
+        uses: shivammathur/setup-php@v2 # use permet permet d'utiliser une action GitHub pour configurer l'environnement PHP. On utilise ici l'action `shivammathur/setup-php` pour installer PHP dans l'environnement d'exécution du job.
+        with: # Spécifie les paramètres pour l'action `Ajout de php`
+          php-version: '8.3'  # Spécifie la version de PHP à installer, ici la version 8.1
+          extensions: mbstring, xml, curl,ctype,iconv,intl, pdo,pdo_mysql,filter, json, bcmath, gd  # Liste des extensions PHP à installer. Ces extensions sont souvent nécessaires pour les applications PHP.
+
+      - name: Gestion du cache # Nom de l'action pour gérer le cache
+        uses: actions/cache@v4 # Utilise l'action `actions/cache` pour mettre en cache les dépendances et accélérer les builds futurs.
+        with: # Spécifie les paramètres pour l'action de gestion du cache
+          path: vendor  # Chemin vers le répertoire à mettre en cache
+          key: ${{ runner.os }}-build-${{ hashFiles('**/composer.lock') }}  # Clé unique pour le cache, basée sur le système d'exploitation (ici ubuntu-latest) et le hash du fichier composer.lock.Cette clé permet de créer un cache spécifique à la version des dépendances du projet.donc si le fichier composer.lock change, le cache sera invalidé et un nouveau cache sera créé sinon on utilisera le cache existant.
+          # La clé est utilisée pour identifier le cache et le restaurer lors des exécutions futures.
+
+      - name: Installation des dépendances # Nom de l'action pour installer les dépendances
+        run: | 
+            composer install --no-interaction --prefer-dist --optimize-autoloader  
+            composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools/php-cs-fixer
+           # Commande pour installer les dépendances PHP via Composer. Les options `--no-interaction`, `--prefer-dist`, et `--optimize-autoloader` sont utilisées pour une installation optimisée et sans interaction utilisateur .
+
+      - name: Vérification des vulnérabilités dans les dépendances
+        run: composer audit # Cette action utilise Composer pour vérifier les vulnérabilités dans les dépendances du projet PHP. La commande `composer audit` analyse les dépendances installées et signale les éventuelles vulnérabilités connues.
+      
+      - name: Vérification des vulnérabilités dans un projet Symfony
+        run: |
+              curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
+              sudo apt install -y symfony-cli
+
+      - name: Vérification des vulnérabilités dans un projet Symfony
+        run: |
+          symfony check:security --no-interaction
+
+## ANALYSE DU CODE 
+
+      - name: analyse avec PHP CS FIXER
+        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php -v --dry-run
