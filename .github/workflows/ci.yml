@@ -1,0 +1,104 @@
+name: Pipeline CI  # Nom du workflow affiché dans l’interface GitHub Actions
+
+on:
+  push:  # Déclenche le workflow lorsqu’un commit est poussé (push) sur une branche spécifique
+    branches:
+      - main  # Se déclenche uniquement quand la branche 'main' reçoit un push (ex : git push origin main)
+
+  pull_request:  # Déclenche le workflow lorsqu’une Pull Request est ouverte, synchronisée, ou mise à jour
+    branches:
+      - main  # Se déclenche uniquement pour les PR ciblant la branche 'main' (ex : PR de feature vers main)
+
+jobs:
+  initialisation:  # Nom du job, qui peut être utilisé pour identifier le job dans l’interface GitHub Actions
+    runs-on: ubuntu-latest  # Spécifie l’environnement d’exécution du job, ici une machine virtuelle Ubuntu
+
+    continue-on-error: false  # Indique que le job doit échouer si une étape échoue. Si cette option est définie sur true, le job continuera même si une étape échoue, ce qui n'est pas souhaitable dans un pipeline CI.
+
+    steps:  # Liste des actions à exécuter dans le job build-ci
+
+      - name: Checkout code  # Nom de l'action, affiché dans l’interface GitHub Actions.
+        uses: actions/checkout@v2  # Action GitHub pour récupérer le code source du dépôt.Elle est obligatoire pour accéder au code du dépôt dans le job.Sans cette ligne github actions ne peut pas accéder au code du dépôt.
+
+      - name: liste mes fichiers  # Cette première action est un simple exemple pour lister les fichiers du répertoire courant.pour voir cela, aller dans l’onglet "Actions"
+        run: ls -la  # Commande shell exécutée pour lister les fichiers du répertoire courant. Utile pour vérifier que le code a bien été récupéré.
+      
+      - name: Ajout de php # Nom de l'action pour installer PHP
+        uses: shivammathur/setup-php@v2 # use permet permet d'utiliser une action GitHub pour configurer l'environnement PHP. On utilise ici l'action `shivammathur/setup-php` pour installer PHP dans l'environnement d'exécution du job.
+        with: # Spécifie les paramètres pour l'action `Ajout de php`
+          php-version: '8.3'  # Spécifie la version de PHP à installer, ici la version 8.1
+          extensions: mbstring, xml, curl,ctype,iconv,intl, pdo,pdo_mysql,filter, json, bcmath, gd  # Liste des extensions PHP à installer. Ces extensions sont souvent nécessaires pour les applications PHP.
+
+      - name: Gestion du cache # Nom de l'action pour gérer le cache
+        uses: actions/cache@v4 # Utilise l'action `actions/cache` pour mettre en cache les dépendances et accélérer les builds futurs.
+        with: # Spécifie les paramètres pour l'action de gestion du cache
+          path: vendor  # Chemin vers le répertoire à mettre en cache
+          key: ${{ runner.os }}-build-${{ hashFiles('**/composer.lock') }}  # Clé unique pour le cache, basée sur le système d'exploitation (ici ubuntu-latest) et le hash du fichier composer.lock.Cette clé permet de créer un cache spécifique à la version des dépendances du projet.donc si le fichier composer.lock change, le cache sera invalidé et un nouveau cache sera créé sinon on utilisera le cache existant.
+          # La clé est utilisée pour identifier le cache et le restaurer lors des exécutions futures.
+
+      - name: Installation des dépendances # Nom de l'action pour installer les dépendances
+        run: | 
+            composer install --no-interaction --prefer-dist --optimize-autoloader  
+            
+            #PHP CS FIXER(DANS LA PARTIE ANALYSE DU CODE)
+            composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools/php-cs-fixer
+
+            # PHPSTAN(DANS LA PARTIE ANALYSE DU CODE)
+            composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools/phpstan
+
+            # PHP UNIT 
+            composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools/phpunit
+
+           # CETTE PARTIE EST A FAIRE DANS LA SECONDE PARTIE : Commande pour installer les dépendances PHP via Composer. Les options `--no-interaction`, `--prefer-dist`, et `--optimize-autoloader` sont utilisées pour une installation optimisée et sans interaction utilisateur .
+
+      - name: Vérification des vulnérabilités dans les dépendances
+        run: composer audit # Cette action utilise Composer pour vérifier les vulnérabilités dans les dépendances du projet PHP. La commande `composer audit` analyse les dépendances installées et signale les éventuelles vulnérabilités connues.
+      
+      - name: Vérification des vulnérabilités dans un projet Symfony
+        run: |
+              curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
+              sudo apt install -y symfony-cli
+
+      - name: Vérification des vulnérabilités dans un projet Symfony
+        run: |
+          symfony check:security --no-interaction
+
+## ANALYSE DU CODE 
+       
+       # CS FIXER
+      - name: analyse avec PHP CS FIXER
+        env: #Variable d'environnement pour PHP CS FIXER
+          # PHP_CS_FIXER_IGNORE_ENV: 1 permet d'ignorer les variables d'environnement pour la configuration de PHP CS-FIXER.Icie j'en ai besoin pour ne pas teniir compte de la version de PHP utilisée dans l'environnement d'exécution du job.
+          PHP_CS_FIXER_IGNORE_ENV: 1
+        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php -v --dry-run
+
+      # PHPSTAN
+      - name: analyse avec PHPSTAN
+        run: ./tools/phpstan/vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress --memory-limit=1G
+      
+      # LINTER 
+
+      ## LINTER TWIG
+      - name: Linter Twig
+        run: ./bin/console lint:twig templates # Cette action utilise la commande `lint:twig` de Symfony pour vérifier la syntaxe des fichiers Twig dans le répertoire `templates`. Elle signale les erreurs de syntaxe ou les problèmes potentiels dans les fichiers Twig.
+
+      ## LINTER YAML
+      - name: Linter YAML
+        run: ./bin/console lint:yaml config --parse-tags # Cette action utilise la commande `lint:yaml` de Symfony pour vérifier la syntaxe des fichiers YAML dans le répertoire `config`. Elle signale les erreurs de syntaxe ou les problèmes potentiels dans les fichiers YAML.
+
+      ## LINTER DOCTRINE
+      - name: Linter Doctrine
+        run: ./bin/console doctrine:schema:validate --skip-sync -vvv # Cette action utilise la commande `doctrine:schema:validate` de Symfony pour valider le schéma de la base de données. Elle vérifie que les entités Doctrine sont correctement mappées et que le schéma est en accord avec les entités définies dans le code.
+
+      ## LINTER CONTAINERS
+      - name: Linter Containers
+        run: ./bin/console lint:container # Cette action utilise la commande `lint:container` de Symfony pour vérifier la configuration des conteneurs de services. Elle vérifie que les valeurs injectées dans les services correspondent aux déclarations de type.
+
+      ## LES TESTS UNITAIRES
+      - name: Exécution des tests unitaires
+        run: ./tools/phpunit/vendor/bin/phpunit --colors=always
+        # Cette action exécute les tests unitaires en utilisant PHPUnit. Elle utilise le fichier de configuration `phpunit.xml.dist` à la racine pour configurer les tests.
+
+      - name: Affichage des résultats des tests unitaires
+        run: ./tools/phpunit/vendor/bin/phpunit --colors=never --testdox
+        # Cette action exécute les tests unitaires avec l'option `--testdox` pour afficher un rapport de test plus lisible et compréhensible.

@@ -1,0 +1,15 @@
+{
+    "name": "tools/phpunit",
+    "description": "PHPUnit tool for CI/CD pipeline",
+    "type": "project",
+    "require": {
+        "phpunit/phpunit": "^9.6",
+        "symfony/phpunit-bridge": "^7.2"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
