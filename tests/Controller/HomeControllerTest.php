@@ -8,7 +8,12 @@ class HomeControllerTest extends TestCase
 {
     public function testSimpleAssertion(): void
     {
-        $this->assertTrue(true);
-        $this->assertEquals(2, 1 + 1);
+        $result = $this->addNumbers(1, 1);
+        $this->assertEquals(2, $result);
+    }
+
+    private function addNumbers(int $a, int $b): int
+    {
+        return $a + $b;
     }
 }
