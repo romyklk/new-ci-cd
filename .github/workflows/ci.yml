@@ -13,10 +13,16 @@ jobs:
   build-ci:  # Nom du job, qui peut être utilisé pour identifier le job dans l’interface GitHub Actions
     runs-on: ubuntu-latest  # Spécifie l’environnement d’exécution du job, ici une machine virtuelle Ubuntu
 
-    steps:  # Liste des étapes à exécuter dans le job build-ci
+    steps:  # Liste des actions à exécuter dans le job build-ci
 
-      - name: Checkout code  # Nom de l’étape, affiché dans l’interface GitHub Actions.
+      - name: Checkout code  # Nom de l'action, affiché dans l’interface GitHub Actions.
         uses: actions/checkout@v2  # Action GitHub pour récupérer le code source du dépôt.Elle est obligatoire pour accéder au code du dépôt dans le job.Sans cette ligne github actions ne peut pas accéder au code du dépôt.
 
       - name: liste mes fichiers  # Cette première action est un simple exemple pour lister les fichiers du répertoire courant.pour voir cela, aller dans l’onglet "Actions"
         run: ls -la  # Commande shell exécutée pour lister les fichiers du répertoire courant. Utile pour vérifier que le code a bien été récupéré.
+      
+      - name: Ajout de php # Nom de l'action pour installer PHP
+        uses: shivammathur/setup-php@v2 # use permet permet d'utiliser une action GitHub pour configurer l'environnement PHP. On utilise ici l'action `shivammathur/setup-php` pour installer PHP dans l'environnement d'exécution du job.
+        with: # Spécifie les paramètres pour l'action `Ajout de php`
+          php-version: '8.3'  # Spécifie la version de PHP à installer, ici la version 8.1
+          extensions: mbstring, xml, curl,ctype,inconv,intl, pdo,pdo_mysql,filter, json, bcmath, gd  # Liste des extensions PHP à installer. Ces extensions sont souvent nécessaires pour les applications PHP.
