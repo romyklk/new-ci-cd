@@ -29,6 +29,7 @@ return (new Config())
         'no_whitespace_in_blank_line' => true, // Supprime les espaces inutiles dans les lignes vides
         'linebreak_after_opening_tag' => true, // Force un saut de ligne après la balise d’ouverture PHP
         'no_extra_blank_lines' => true,   // Supprime les lignes vides superflues
+        'concat_space' => false,          // Désactive la règle de formatage des espaces de concaténation
         'class_attributes_separation' => [
             'elements' => ['method' => 'one'],
         ], // Sépare les méthodes par une ligne vide
