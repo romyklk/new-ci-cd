@@ -1,0 +1,22 @@
+name: Pipeline CI  # Nom du workflow affiché dans l’interface GitHub Actions
+
+on:
+  push:  # Déclenche le workflow lorsqu’un commit est poussé (push) sur une branche spécifique
+    branches:
+      - main  # Se déclenche uniquement quand la branche 'main' reçoit un push (ex : git push origin main)
+
+  pull_request:  # Déclenche le workflow lorsqu’une Pull Request est ouverte, synchronisée, ou mise à jour
+    branches:
+      - main  # Se déclenche uniquement pour les PR ciblant la branche 'main' (ex : PR de feature vers main)
+
+jobs:
+  build-ci:  # Nom du job, qui peut être utilisé pour identifier le job dans l’interface GitHub Actions
+    runs-on: ubuntu-latest  # Spécifie l’environnement d’exécution du job, ici une machine virtuelle Ubuntu
+
+    steps:  # Liste des étapes à exécuter dans le job build-ci
+
+      - name: Checkout code  # Nom de l’étape, affiché dans l’interface GitHub Actions.
+        uses: actions/checkout@v2  # Action GitHub pour récupérer le code source du dépôt.Elle est obligatoire pour accéder au code du dépôt dans le job.Sans cette ligne github actions ne peut pas accéder au code du dépôt.
+
+      - name: liste mes fichiers  # Nom de l’étape, affiché dans l’interface GitHub Actions.
+        run: ls -la  # Commande shell exécutée pour lister les fichiers du répertoire courant. Utile pour vérifier que le code a bien été récupéré.
