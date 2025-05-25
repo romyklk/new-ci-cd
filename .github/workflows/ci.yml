@@ -91,3 +91,9 @@ jobs:
       ## LINTER CONTAINERS
       - name: Linter Containers
         run: ./bin/console lint:container # Cette action utilise la commande `lint:container` de Symfony pour vérifier la configuration des conteneurs de services. Elle vérifie que les valeurs injectées dans les services correspondent aux déclarations de type.
+
+      ## LES TESTS UNITAIRES
+      - name: Exécution des tests unitaires
+        run: ./tools/phpunit/vendor/bin/phpunit --configuration=tools/phpunit/phpunit.xml --coverage-text --colors=never --no-interaction # Cette action exécute les tests unitaires du projet en utilisant PHPUnit. Elle utilise le fichier de configuration `phpunit.xml` situé dans le répertoire `tools/phpunit`. Les options `--coverage-text`, `--colors=never`, et `--no-interaction` sont utilisées pour générer un rapport de couverture de code, désactiver les couleurs dans la sortie, et éviter toute interaction utilisateur pendant l'exécution des tests.
+      - name: Affichage des résultats des tests unitaires
+        run: ./tools/phpunit/vendor/bin/phpunit --configuration=tools/phpunit/phpunit.xml --coverage-text --colors=never --no-interaction --testdox # Cette action exécute à nouveau les tests unitaires avec l'option `--testdox` pour afficher un rapport de test plus lisible et compréhensible. Elle utilise le même fichier de configuration `phpunit.xml` que précédemment.
