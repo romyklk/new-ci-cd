@@ -102,3 +102,9 @@ jobs:
       - name: Affichage des résultats des tests unitaires
         run: ./tools/phpunit/vendor/bin/phpunit --colors=never --testdox
         # Cette action exécute les tests unitaires avec l'option `--testdox` pour afficher un rapport de test plus lisible et compréhensible.
+
+      - name: Clear Symfony cache # Nom de l'action pour vider le cache Symfony
+        run: |
+          php bin/console cache:clear --env=prod --no-warmup
+          php bin/console cache:warmup --env=prod
+
