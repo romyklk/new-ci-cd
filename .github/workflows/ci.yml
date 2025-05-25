@@ -56,10 +56,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        # Suppression du "path: tools" pour cloner à la racine
+
+      - name: Ajout de php
+        uses: shivammathur/setup-php@v2
         with:
-          path: tools  # Spécifie le chemin vers le répertoire contenant les outils nécessaires pour l'analyse statique.
+          php-version: '8.3'
+          extensions: mbstring, xml, curl,ctype,iconv,intl, pdo,pdo_mysql,filter, json, bcmath, gd
+
       - name: Installation des outils d'analyse statique
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools  # Installe les dépendances nécessaires pour l'analyse statique à partir du répertoire `tools`.
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools/php-cs-fixer  # Installe dans le bon répertoire
 
       - name: analyse avec PHP CS FIXER
-        run: ./tools/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php -v --dry-run
+        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php -v --dry-run
