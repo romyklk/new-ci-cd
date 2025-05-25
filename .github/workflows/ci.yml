@@ -10,7 +10,7 @@ on:
       - main  # Se déclenche uniquement pour les PR ciblant la branche 'main' (ex : PR de feature vers main)
 
 jobs:
-  build-ci:  # Nom du job, qui peut être utilisé pour identifier le job dans l’interface GitHub Actions
+  initialisation:  # Nom du job, qui peut être utilisé pour identifier le job dans l’interface GitHub Actions
     runs-on: ubuntu-latest  # Spécifie l’environnement d’exécution du job, ici une machine virtuelle Ubuntu
 
     steps:  # Liste des actions à exécuter dans le job build-ci
@@ -36,3 +36,13 @@ jobs:
 
       - name: Installation des dépendances # Nom de l'action pour installer les dépendances
         run: composer install --no-interaction --prefer-dist --optimize-autoloader  # Commande pour installer les dépendances PHP via Composer. Les options `--no-interaction`, `--prefer-dist`, et `--optimize-autoloader` sont utilisées pour une installation optimisée et sans interaction utilisateur .
+
+  checking-des-vulnerabilite:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Vérification des vulnérabilités
+        run: composer audit
