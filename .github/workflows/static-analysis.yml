@@ -1,0 +1,45 @@
+name: Analyse Statique du Code
+
+on:
+  workflow_run:
+    workflows: ["Initialisation et Vérification des Vulnérabilités"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  static-analysis:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Ajout de php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, curl,ctype,iconv,intl, pdo,pdo_mysql,filter, json, bcmath, gd
+
+      - name: Download vendor dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: vendor-dependencies
+          path: vendor/
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Installation des outils d'analyse statique
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools/php-cs-fixer
+
+      - name: Debug PHP-CS-Fixer path
+        run: |
+          echo "Contenu du dossier tools/php-cs-fixer/vendor/bin/ :"
+          ls -la tools/php-cs-fixer/vendor/bin/
+          echo "Vérification de l'existence du binaire :"
+          file tools/php-cs-fixer/vendor/bin/php-cs-fixer || echo "Le fichier php-cs-fixer n'existe pas"
+
+      - name: Analyse avec PHP CS FIXER
+        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php -v --dry-run
