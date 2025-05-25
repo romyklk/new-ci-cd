@@ -55,4 +55,4 @@ jobs:
 
       - name: Vérification des vulnérabilités dans un projet Symfony
         run: |
-          symfony check:security --no-interaction --format=txt --ansi --no-ansi --no-color
+          symfony check:security --no-interaction
