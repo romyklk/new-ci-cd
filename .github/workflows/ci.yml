@@ -63,3 +63,5 @@ jobs:
 
       - name: analyse avec PHPSTAN
         run: ./tools/phpstan/vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress --memory-limit=1G
+
+      
