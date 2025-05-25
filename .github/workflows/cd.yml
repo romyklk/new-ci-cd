@@ -25,5 +25,12 @@ jobs:
           username: ${{ secrets.SSH_USER }}  # Nom d'utilisateur pour se connecter au serveur distant, également stocké dans les secrets GitHub.
           key: ${{ secrets.SSH_PRIVATE_KEY }}  # Clé privée SSH pour l'authentification, stockée dans les secrets GitHub.
           port: ${{ secrets.SSH_PORT }}  # Port SSH du serveur distant, stocké dans les secrets GitHub.
+          script: |
+            cd ~/domains/romyklk.me/public_html/symdeploy
+            git pull origin production  # Met à jour le code sur le serveur distant en tirant les dernières modifications de la branche 'production'.
+            composer install --no-interaction --prefer-dist --optimize-autoloader  # Installe les dépendances PHP via Composer sur le serveur distant.
+            php bin/console cache:clear --env=prod  # Vide le cache de l'application Symfony en mode production.
+            php bin/console doctrine:migrations:migrate --no-interaction  # Exécute les migrations de la base de données pour mettre à jour le schéma en fonction des entités définies dans l'application Symfony.
+            php bin/console assets:install --symlink  # Installe les assets (fichiers CSS, JS, images, etc.) de l'application Symfony.
 
 
