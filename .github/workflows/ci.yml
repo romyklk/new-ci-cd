@@ -67,5 +67,12 @@ jobs:
       - name: Installation des outils d'analyse statique
         run: composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools/php-cs-fixer  # Installe dans le bon répertoire
 
+      - name: Debug PHP-CS-Fixer path
+        run: |
+          echo "Contenu du dossier tools/php-cs-fixer/vendor/bin/ :"
+          ls -la tools/php-cs-fixer/vendor/bin/
+          echo "Vérification de l'existence du binaire :"
+          file tools/php-cs-fixer/vendor/bin/php-cs-fixer || echo "Le fichier php-cs-fixer n'existe pas"
+
       - name: analyse avec PHP CS FIXER
-        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php -v --dry-run
+        run: composer exec php-cs-fixer --working-dir=tools/php-cs-fixer -- fix --config=.php-cs-fixer.dist.php -v --dry-run
