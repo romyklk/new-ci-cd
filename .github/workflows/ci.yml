@@ -79,4 +79,10 @@ jobs:
       - name: Linter YAML
         run: ./bin/console lint:yaml config --parse-tags # Cette action utilise la commande `lint:yaml` de Symfony pour vérifier la syntaxe des fichiers YAML dans le répertoire `config`. Elle signale les erreurs de syntaxe ou les problèmes potentiels dans les fichiers YAML.
 
-      
+      ## LINTER DOCTRINE
+      - name: Linter Doctrine
+        run: ./bin/console doctrine:schema:validate --skip-sync -vvv # Cette action utilise la commande `doctrine:schema:validate` de Symfony pour valider le schéma de la base de données. Elle vérifie que les entités Doctrine sont correctement mappées et que le schéma est en accord avec les entités définies dans le code.
+
+      ## LINTER CONTAINERS
+      - name: Linter Containers
+        run: ./bin/console lint:container --no-optional --no-unused --no-deprecated # Cette action utilise la commande `lint:container` de Symfony pour vérifier la configuration des conteneurs de services. Elle signale les erreurs de configuration, les services inutilisés, et les services obsolètes dans le conteneur de services Symfony.
