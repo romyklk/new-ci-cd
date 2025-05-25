@@ -1,46 +1,341 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - Mon App{% endblock %}
+{% block title %}Accueil - Plateforme DevOps{% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>🚀 Bienvenue</h1>
-    <p style="margin: 1.5rem 0; font-size: 1.1rem; color: #666;">
-        Application Symfony avec CI/CD
-        V1.0.0
-    </p>
-    <div style="margin-top: 2rem;">
-        <span
-            style="display: inline-block; background: #28a745; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
-            ✅ Déployé avec succès
-        </span>
-        <span
-            style="display: inline-block; background: #17a2b8; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; margin-left: 1rem;">
-            🌐 Environnement de production
-        </span>
-        <button class="btn btn-primary" style="margin-left: 1rem;">Accéder à l'application</button> 
-
-        <button class="btn btn-secondary" style="margin-left: 1rem;">Voir les logs</button>
-    </div>
-</div>
-
-<section>
-    <div class="container mt-5">
-        <h2>Dernières mises à jour</h2>
-        <ul class="list-group">
-            <li class="list-group-item">
-                <strong>V1.0.0</strong> - Déploiement initial réussi
-                <span class="badge bg-success float-end">2023-10-01</span>
-            </li>
-            <li class="list-group-item">
-                <strong>V0.9.0</strong> - Correction de bugs mineurs
-                <span class="badge bg-secondary float-end">2023-09-15</span>
-            </li>
-            <li class="list-group-item">
-                <strong>V0.8.0</strong> - Ajout de la fonctionnalité X
-                <span class="badge bg-info float-end">2023-09-01</span>
-            </li>
-        </ul>
+<!-- Section Hero -->
+<section class="hero-section">
+    <div class="container">
+        <h1 style="font-size: 3rem; margin-bottom: 1rem;">🚀 Plateforme DevOps</h1>
+        <p style="font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">
+            Pipeline CI/CD Symfony avec déploiement automatisé
+        </p>
+        <div style="margin-bottom: 2rem;">
+            <span class="badge badge-success" style="margin: 0.5rem;">✅ V2.1.3 Déployé</span>
+            <span class="badge badge-info" style="margin: 0.5rem;">🌐 Production</span>
+            <span class="badge badge-warning" style="margin: 0.5rem;">⚡ Performance+</span>
+        </div>
+        <div>
+            <a href="#features" class="btn btn-primary">Découvrir les fonctionnalités</a>
+            <a href="#monitoring" class="btn btn-secondary">Voir le monitoring</a>
+        </div>
     </div>
 </section>
+
+<div class="main-content">
+    <!-- Section Statistiques -->
+    <section class="section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: #333;">📊 Statistiques en temps réel</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">127</div>
+                    <div>Déploiements réussis</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">99.8%</div>
+                    <div>Taux de disponibilité</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2.3s</div>
+                    <div>Temps de déploiement</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div>Erreurs critiques</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div>Tests automatisés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">42</div>
+                    <div>Commits cette semaine</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Fonctionnalités -->
+    <section id="features" class="section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">⚡ Fonctionnalités de la plateforme</h2>
+            <div class="grid">
+                <div class="card feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>CI/CD Automatisé</h3>
+                    <p>Pipeline complètement automatisé avec tests, build et déploiement automatique sur plusieurs
+                        environnements.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                    <small>Pipeline fonctionnel à 100%</small>
+                </div>
+
+                <div class="card feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Sécurité Avancée</h3>
+                    <p>Analyse de sécurité automatique, gestion des secrets, et surveillance des vulnérabilités en
+                        continu.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 95%;"></div>
+                    </div>
+                    <small>Sécurité optimisée à 95%</small>
+                </div>
+
+                <div class="card feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Monitoring 24/7</h3>
+                    <p>Surveillance continue de la performance, alertes en temps réel et tableaux de bord détaillés.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 98%;"></div>
+                    </div>
+                    <small>Monitoring actif à 98%</small>
+                </div>
+
+                <div class="card feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Déploiement Rapide</h3>
+                    <p>Déploiements zero-downtime avec rollback automatique en cas de problème détecté.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 92%;"></div>
+                    </div>
+                    <small>Efficacité à 92%</small>
+                </div>
+
+                <div class="card feature-card">
+                    <div class="feature-icon">🧪</div>
+                    <h3>Tests Automatisés</h3>
+                    <p>Suite complète de tests unitaires, d'intégration et end-to-end avec couverture de code.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 87%;"></div>
+                    </div>
+                    <small>Couverture de code : 87%</small>
+                </div>
+
+                <div class="card feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>API RESTful</h3>
+                    <p>API moderne avec documentation Swagger, versioning et authentification JWT.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 90%;"></div>
+                    </div>
+                    <small>Documentation complète à 90%</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Monitoring -->
+    <section id="monitoring" class="section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">🖥️ Dashboard de monitoring</h2>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">📊 Métriques Serveur</div>
+                    <div class="card-body">
+                        <div style="margin-bottom: 1rem;">
+                            <strong>CPU Usage:</strong> 23%
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 23%; background: #28a745;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Memory Usage:</strong> 67%
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 67%; background: #ffc107;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Disk Usage:</strong> 45%
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%; background: #17a2b8;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <strong>Network I/O:</strong> 12%
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 12%; background: #28a745;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">🌐 Trafic Web</div>
+                    <div class="card-body">
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Visiteurs actifs:</strong> 1,247
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Pages vues/minute:</strong> 856
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Temps de réponse moyen:</strong> 142ms
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Taux d'erreur:</strong> 0.02%
+                        </div>
+                        <div>
+                            <strong>Bande passante:</strong> 2.3 MB/s
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">💾 Base de Données</div>
+                    <div class="card-body">
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Connexions actives:</strong> 45/100
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%; background: #28a745;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Requêtes/seconde:</strong> 234
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Taille de la DB:</strong> 2.8 GB
+                        </div>
+                        <div>
+                            <strong>Dernière sauvegarde:</strong> Il y a 2h
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Timeline des déploiements -->
+    <section class="section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">📅 Historique des déploiements</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong>v2.1.3 - Optimisations de performance</strong>
+                        <span class="badge badge-success">Réussi</span>
+                    </div>
+                    <p style="color: #666; margin-bottom: 0.5rem;">
+                        • Amélioration du cache Redis<br>
+                        • Optimisation des requêtes SQL<br>
+                        • Mise à jour des dépendances
+                    </p>
+                    <small style="color: #999;">25 mai 2025 - 14:32</small>
+                </div>
+
+                <div class="timeline-item">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong>v2.1.2 - Corrections de bugs</strong>
+                        <span class="badge badge-success">Réussi</span>
+                    </div>
+                    <p style="color: #666; margin-bottom: 0.5rem;">
+                        • Correction du bug d'authentification<br>
+                        • Fix des notifications push<br>
+                        • Amélioration de l'interface utilisateur
+                    </p>
+                    <small style="color: #999;">24 mai 2025 - 09:15</small>
+                </div>
+
+                <div class="timeline-item">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong>v2.1.1 - Nouvelle fonctionnalité API</strong>
+                        <span class="badge badge-success">Réussi</span>
+                    </div>
+                    <p style="color: #666; margin-bottom: 0.5rem;">
+                        • Ajout de l'endpoint /api/v2/analytics<br>
+                        • Amélioration de la documentation Swagger<br>
+                        • Tests d'intégration complets
+                    </p>
+                    <small style="color: #999;">23 mai 2025 - 16:45</small>
+                </div>
+
+                <div class="timeline-item">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong>v2.1.0 - Migration base de données</strong>
+                        <span class="badge badge-success">Réussi</span>
+                    </div>
+                    <p style="color: #666; margin-bottom: 0.5rem;">
+                        • Migration vers PostgreSQL 15<br>
+                        • Nouveaux index pour les performances<br>
+                        • Sauvegarde automatique configurée
+                    </p>
+                    <small style="color: #999;">22 mai 2025 - 11:20</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Actions rapides -->
+    <section class="section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">⚡ Actions rapides</h2>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">🔧 Gestion</div>
+                    <div class="card-body" style="text-align: center;">
+                        <a href="#" class="btn btn-primary">Déclencher un déploiement</a>
+                        <a href="#" class="btn btn-secondary">Voir les logs</a>
+                        <a href="#" class="btn btn-success">Backup manuel</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">📊 Rapports</div>
+                    <div class="card-body" style="text-align: center;">
+                        <a href="#" class="btn btn-primary">Rapport de performance</a>
+                        <a href="#" class="btn btn-secondary">Analyse de sécurité</a>
+                        <a href="#" class="btn btn-success">Export des métriques</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">🛠️ Outils</div>
+                    <div class="card-body" style="text-align: center;">
+                        <a href="#" class="btn btn-primary">Console de debug</a>
+                        <a href="#" class="btn btn-secondary">Gestionnaire de cache</a>
+                        <a href="#" class="btn btn-success">Documentation API</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <section class="section" style="background: #343a40; color: white;">
+        <div class="container" style="text-align: center;">
+            <h3 style="margin-bottom: 1rem;">🚀 Plateforme DevOps</h3>
+            <p style="margin-bottom: 2rem; opacity: 0.8;">
+                Symfony 7.0 • PHP 8.3 • PostgreSQL 15 • Docker • GitHub Actions
+            </p>
+            <div style="margin-bottom: 1rem;">
+                <span class="badge badge-success" style="margin: 0.25rem;">Haute disponibilité</span>
+                <span class="badge badge-info" style="margin: 0.25rem;">Auto-scaling</span>
+                <span class="badge badge-warning" style="margin: 0.25rem;">Monitoring 24/7</span>
+            </div>
+            <p style="font-size: 0.9rem; opacity: 0.6;">
+                © 2025 Plateforme DevOps - Déployé automatiquement avec ❤️
+            </p>
+        </div>
+    </section>
+</div>
+
+<script>
+    // Animation des barres de progression
+    document.addEventListener('DOMContentLoaded', function () {
+        const progressBars = document.querySelectorAll('.progress-fill');
+        progressBars.forEach((bar, index) => {
+            setTimeout(() => {
+                bar.style.width = bar.style.width || '0%';
+            }, index * 200);
+        });
+    });
+</script>
 {% endblock %}
