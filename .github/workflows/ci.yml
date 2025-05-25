@@ -38,7 +38,10 @@ jobs:
         run: | 
             composer install --no-interaction --prefer-dist --optimize-autoloader  
             
+            #PHP CS FIXER(DANS LA PARTIE ANALYSE DU CODE)
             composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools/php-cs-fixer
+            # PHPSTAN(DANS LA PARTIE ANALYSE DU CODE)
+            composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir=tools/phpstan
            # CETTE PARTIE EST A FAIRE DANS LA SECONDE PARTIE : Commande pour installer les dépendances PHP via Composer. Les options `--no-interaction`, `--prefer-dist`, et `--optimize-autoloader` sont utilisées pour une installation optimisée et sans interaction utilisateur .
 
       - name: Vérification des vulnérabilités dans les dépendances
@@ -57,3 +60,6 @@ jobs:
 
       - name: analyse avec PHP CS FIXER
         run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php -v --dry-run
+
+      - name: analyse avec PHPSTAN
+        run: ./tools/phpstan/vendor/bin/phpstan analyse --configuration=./tools/phpstan/phpstan.neon --no-progress --memory-limit=1G
